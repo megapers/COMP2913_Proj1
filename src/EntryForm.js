@@ -9,28 +9,33 @@ class EntryForm extends React.Component{
         super(props);
         this.state = {
             value: '', 
-            records: []
+            records: [],
+            new_item: {}
         };
         this.formRef = null;
     }
 
     handleChange = (event) => {
         this.setState({value: event.target.value});
-      }
+    }
 
-      handleSubmit = (event) => {
-        this.state.records.push({data: this.state.value, timeStamp: new Date()});
-        console.log(this.state.records);
+    handleSubmit = (event) => {
+        if(this.state.value !== ''){
+
+            const newItem = {
+                data: this.state.value,
+                date: new Date().toLocaleTimeString()
+            };
+            this.setState({new_item: newItem, value: ''});
+        }
         this.formRef.reset();
         event.preventDefault();
-      }
+    }
     
       
 
     render(){
-        const valueList = this.state.records;
-        const table = valueList.length > 0 ? <ItemTable value = {this.state.value}/> : '';
-
+       
         const form = 
         <div>
             <Form ref={(ref) => this.formRef = ref} onSubmit={this.handleSubmit}>
@@ -43,9 +48,10 @@ class EntryForm extends React.Component{
                 </Button>
             </Form>
             <br/>
-            {table}
-            
+            <ItemTable records = {this.state.new_item}/>
+      
         </div>;
+
         return form;
     }
 
