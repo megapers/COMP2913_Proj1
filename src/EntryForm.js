@@ -27,15 +27,14 @@ class EntryForm extends React.Component{
                 date: new Date().toLocaleTimeString()
             };
             this.setState({new_item: newItem, value: ''});
+            this.props.addRecord(newItem);
         }
         this.formRef.reset();
         event.preventDefault();
     }
-    
       
 
     render(){
-       
         const form = 
         <div>
             <Form ref={(ref) => this.formRef = ref} onSubmit={this.handleSubmit}>
@@ -48,14 +47,10 @@ class EntryForm extends React.Component{
                 </Button>
             </Form>
             <br/>
-            <ItemTable records = {this.state.new_item}/>
-      
         </div>;
 
         return form;
     }
-
-
 }
 
 export default EntryForm;

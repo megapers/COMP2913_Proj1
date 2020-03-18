@@ -1,32 +1,53 @@
 import React from 'react';
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-
+import {BootstrapTable, TableHeaderColumn, DeleteButton } from 'react-bootstrap-table';
+import EntryForm from './EntryForm';
 
 class ItemTable extends React.Component{
     constructor(props){
         super(props);
         this.state = {list: [], value: ''};
-        this.options = {
-            defaultSortName: 'item',  // default sort column name
-            defaultSortOrder: 'timeStamp'  // default sort order
-          };
     }
 
     componentDidUpdate(prevproperty){
-        if(prevproperty.records.date !== this.props.records.date){
+        if(prevproperty.record.date !== this.props.record.date){
             this.state.list.push({
-                item: this.props.records.data,
-                timeStamp: this.props.records.date
+                item: this.props.record.data,
+                timeStamp: this.props.record.date
 
             });
         }
     }
 
+    handleDeleteButtonClick = (onClick) => {
+   
+        onClick();
+      }
+
+    createCustomDeleteButton = (onClick) => {
+        return (
+          <DeleteButton
+            btnText='Delete selected item'
+            btnContextual='btn-danger'
+            className='my-custom-class'
+            btnGlyphicon='glyphicon-edit'
+            onClick={ e => this.handleDeleteButtonClick(onClick) }/>
+        );
+      }
 
     render(){
+        console.log(this.state.list);
+
+        const options = {
+            deleteBtn: this.createCustomDeleteButton
+          };
+
+        const selectRow = {
+            mode: 'checkbox'
+          };
+
         return(
             <div>
-            <BootstrapTable ref='table' data={ this.state.list } striped hover>
+            <BootstrapTable selectRow={ selectRow } ref='table' data={ this.state.list } options={ options } striped hover deleteRow>
                 <TableHeaderColumn dataField='item' dataSort={ true }>Data</TableHeaderColumn>
                 <TableHeaderColumn dataField='timeStamp' isKey={ true } dataSort={ true }>Date</TableHeaderColumn>
             </BootstrapTable>
